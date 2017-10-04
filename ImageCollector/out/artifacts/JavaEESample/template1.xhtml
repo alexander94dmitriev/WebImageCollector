@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: sanek94cool
+  Date: 28.09.2017
+  Time: 23:45
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Title</title>
+</h:head>
+
+<h:body>
+    <h:outputText value="Hello, man!" style="color: aqua "/>
+    <h:panelGrid>
+        <p:dataTable var="car" value="#{dtBasicView.cars}" style="border-color: aqua">
+            <p:column headerText="Id">
+                <h:outputText value="#{car.id}" />
+            </p:column>
+
+            <p:column headerText="Year">
+                <h:outputText value="#{car.year}" />
+            </p:column>
+
+            <p:column headerText="Brand">
+                <h:outputText value="#{car.brand}" />
+            </p:column>
+
+            <p:column headerText="Color">
+                <h:outputText value="#{car.color}" />
+            </p:column>
+        </p:dataTable>
+    </h:panelGrid>
+</h:body>
+
+</html>
