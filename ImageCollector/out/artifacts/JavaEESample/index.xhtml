@@ -54,11 +54,14 @@
             </div>
         </h:form>
         <h:form enctype="multipart/form-data">
-            <h:inputFile id="fileInput" value="#{dtBasicView.file}">
-            </h:inputFile>
-            <h:commandButton id="Submit" actionListener="#{dtBasicView.upload}" value="Save">
-                <f:ajax execute="@all" render="@form"/>
-            </h:commandButton>
+            <p:fileUpload fileUploadListener="#{dtBasicView.uploadFile}" auto="true" multiple="true" style="width: 10%"/>
+            <h:panelGrid columns="3">
+                <h:outputText value="Keyup: " />
+                <p:inputText id="counter" value="#{dtBasicView.text}">
+                    <p:ajax event="keyup" update="out" listener="#{dtBasicView.handleKeyEvent}" />
+                </p:inputText>
+                <h:outputText id="out" value="#{dtBasicView.text}" />
+            </h:panelGrid>
         </h:form>
 </h:form>
     </ui:define>

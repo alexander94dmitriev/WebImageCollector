@@ -1,6 +1,7 @@
+package main.view;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 
 /**
  * Created by sanek94cool on 28.09.2017.
@@ -10,7 +11,7 @@ import javax.faces.bean.SessionScoped;
 @RequestScoped
 public class Bean {
 
-    private String text = "Vasily";
+    private String text;
 
     public String getText() {
         return text;
@@ -19,4 +20,10 @@ public class Bean {
     public void setText(String text) {
         this.text = text;
     }
+
+    public void handleText()
+    {
+        this.text = text.toUpperCase();
+    }
+
 }
