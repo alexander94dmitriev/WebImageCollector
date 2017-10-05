@@ -11,8 +11,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
-import java.io.*;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean(name="dtBasicView")
@@ -55,28 +55,12 @@ public class BasicView implements Serializable {
 
     public void uploadFile(FileUploadEvent event) {
         UploadedFile file = event.getFile();
+        imageService.uploadImage(file);
         try {
-            InputStream in = file.getInputstream();
-            String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
-            projectPath = projectPath.replace("out\\artifacts\\JavaEESample\\","images\\");
-            File f = new File(projectPath + file.getFileName());
-            f.createNewFile();
-            FileOutputStream out = new FileOutputStream(f);
-            String test = f.getAbsolutePath();
-            byte[] buffer= new byte[1024];
-            int length;
-
-            while((length=in.read(buffer))>0)
-            {
-                out.write(buffer, 0, length);
-            }
-
-            out.close();
-            in.close();
+            images = imageService.initializeImageList();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public String getText() {

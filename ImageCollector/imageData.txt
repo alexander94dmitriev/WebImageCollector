@@ -1,4 +1,4 @@
 image1;images/image1.png;Steins Gate;Fantasy
 image2;/images/image2.png;Steins Gate;Fantasy
 image3;/images/image3.png;Steins Gate;Fantasy
-image4;/images/image4.png;Steins Gate;OKarin
+image4;/images/image4.png;Steins Gate;Okarin
