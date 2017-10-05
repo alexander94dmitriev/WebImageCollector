@@ -5,12 +5,18 @@ import main.model.CarService;
 import main.model.Image;
 import main.model.ImageService;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -89,5 +95,19 @@ public class BasicView implements Serializable {
 
     public void setImages(List<Image> images) {
         this.images = images;
+    }
+
+    public StreamedContent getImage() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+            // So, we're rendering the view. Return a stub StreamedContent so that it will generate right URL.
+            return new DefaultStreamedContent();
+        }
+        else {
+            // So, browser is requesting the image. Return a real StreamedContent with the image bytes.
+            String filename = context.getExternalContext().getRequestParameterMap().get("filename");
+            return new DefaultStreamedContent(new FileInputStream(new File("C:/", filename)));
+        }
     }
 }

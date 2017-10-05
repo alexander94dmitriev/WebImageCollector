@@ -69,6 +69,7 @@ public class ImageService {
             InputStream in = file.getInputstream();
             String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
             projectPath = projectPath.replace("out\\artifacts\\JavaEESample\\","web\\resources\\images\\");
+            projectPath = "c:/images/";
             File f = new File(projectPath + file.getFileName());
             f.createNewFile();
             FileOutputStream out = new FileOutputStream(f);

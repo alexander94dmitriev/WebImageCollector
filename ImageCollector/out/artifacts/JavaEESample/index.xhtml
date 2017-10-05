@@ -6,22 +6,23 @@
       xmlns:p="http://primefaces.org/ui"
         template="template.xhtml">
     <ui:param name="pageTitle" value="Main"/>
+    <style>
+        {
+            background-color: grey;
+        }
+    </style>
 
     <ui:define name="content">
- <h:form>
-        <h1>#{javaBean.text}</h1>
+    <h:form>
         <h:outputLabel id="Greeting" value="Hello, dude!"/>
-        <h:panelGroup id="includedPage">
-            <ui:include src="test.xhtml"/>
-        </h:panelGroup>
-        <h:form style="background-color: dimgray">
+        <h:panelGroup id="ImageTable">
             <div>
                 <table width="100%" style="height: 500px;">
                     <tbody>
                         <tr>
                             <td width="20%" >
                                 <p:panel header="Left Part">
-                                    <p:accordionPanel multiple="false" style="height: 500px">
+                                    <p:accordionPanel id="ImageList" multiple="false" style="height: 500px">
                                         <p:tab title="Collections"/>
                                         <p:tab title="Tags"/>
                                     </p:accordionPanel>
@@ -35,7 +36,7 @@
                                         </p:column>
 
                                         <p:column headerText="Image">
-                                            <p:graphicImage style="max-height: 200px; max-width: 200px" value="resources/#{image.path}"/>
+                                            <h:graphicImage id="graphicImage"  style="max-height: 200px; max-width: 200px" value="resources/#{image.path}"/>
                                         </p:column>
 
                                         <p:column headerText="Tags">
@@ -48,9 +49,10 @@
                     </tbody>
                 </table>
             </div>
-        </h:form>
+        </h:panelGroup>
+        <p:fileUpload fileUploadListener="#{dtBasicView.uploadFile}" update="@form" auto="true" multiple="true" style="width: 10%"/>
+    </h:form>
         <h:form enctype="multipart/form-data">
-            <p:fileUpload fileUploadListener="#{dtBasicView.uploadFile}" auto="true" multiple="true" style="width: 10%"/>
             <h:panelGrid columns="3">
                 <h:outputText value="Keyup: " />
                 <p:inputText id="counter" value="#{dtBasicView.text}">
@@ -59,6 +61,5 @@
                 <h:outputText id="out" value="#{dtBasicView.text}" />
             </h:panelGrid>
         </h:form>
-</h:form>
     </ui:define>
 </ui:composition>

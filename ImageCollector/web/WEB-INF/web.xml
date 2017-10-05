@@ -12,4 +12,12 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>fileServlet</servlet-name>
+        <servlet-class>main.FileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>fileServlet</servlet-name>
+        <url-pattern>/resources/images/*</url-pattern>
+    </servlet-mapping>
 </web-app>
