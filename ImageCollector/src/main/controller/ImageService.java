@@ -1,5 +1,6 @@
-package main.model;
+package main.controller;
 
+import main.model.Image;
 import org.primefaces.model.UploadedFile;
 
 import javax.faces.bean.ManagedBean;
@@ -10,7 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Adminko on 03/10/17.
+ * This class is the major controller for managing different actions related to images such as:
+ * Creating the list of images
+ * Adding images
+ * Removing images
  */
 
 @ManagedBean (name = "imageService")
@@ -18,6 +22,9 @@ import java.util.List;
 public class ImageService {
     private List<Image> allImages;
 
+    /*
+    Read imageData.txt file and initialize list of images
+     */
     public List<Image> initializeImageList() throws IOException {
         allImages = new ArrayList<>();
         String filePath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
@@ -33,6 +40,8 @@ public class ImageService {
 
 
         while ((readLine = b.readLine()) != null) {
+            if(readLine.isEmpty())
+                continue;
             String[] split = readLine.split(";|\n");
             String imagename = split[0];
             String imagePath = split[1];
@@ -64,6 +73,9 @@ public class ImageService {
         allImages.add(image);
     }
 
+    /*
+    Upload the image
+     */
     public void uploadImage(UploadedFile file) {
         try {
             InputStream in = file.getInputstream();
@@ -100,6 +112,9 @@ public class ImageService {
         }
     }
 
+    /*
+    Add the Image to the text file list
+     */
     public void addImageToList(Image image)
     {
         String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
@@ -115,5 +130,51 @@ public class ImageService {
             e.printStackTrace();
         }
 
+    }
+
+    /*
+    Delete the image from the list and remove the corresponding data from the imageData.txt
+     */
+    public List<Image> deleteSelectedImage(Image image) {
+        allImages.remove(image);
+
+        String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
+        projectPath = projectPath.replace("out\\artifacts\\JavaEESample\\","");
+        File f = new File(projectPath + "imageData.txt");
+
+        File newFile = new File(f.getAbsolutePath()+".tmp");
+
+    try {
+        BufferedReader b = new BufferedReader(new FileReader(f));
+        PrintWriter writer = new PrintWriter(new FileWriter(newFile));
+        String readLine = "";
+
+        while ((readLine = b.readLine()) != null) {
+            if(readLine.contains(image.getName()))
+                continue;
+            if(!readLine.isEmpty()) {
+                writer.println(readLine);
+                writer.flush();
+            }
+            readLine = null;
+        }
+
+        b.close();
+        writer.close();
+        System.gc();
+
+        if(!f.delete()) {
+            throw new IOException("Cannot delete old imageData file");
+        }
+
+        if(!newFile.renameTo(f)) {
+            throw new IOException("Cannot rename new imageData file");
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+        return allImages;
     }
 }

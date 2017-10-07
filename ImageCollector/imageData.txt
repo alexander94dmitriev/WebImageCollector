@@ -1,6 +1,5 @@
-image1;images/image1.png;Steins Gate;Fantasy
-image2;/images/image2.png;Steins Gate;Fantasy
-image3;/images/image3.png;Steins Gate;Fantasy
-image4;/images/image4.png;Steins Gate;Okarin
-Cockpit_A - Copy;/images/Cockpit_A - Copy.png;None
-Cockpit_N;/images/Cockpit_N.png;None
+BG98A;/images/BG98A.png;None
+BG98N1;/images/BG98N1.png;None
+BG98N2;/images/BG98N2.png;None
+
+settings-512;/images/settings-512.png;None

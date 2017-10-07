@@ -13,7 +13,7 @@ public class Image implements Serializable {
     private String path;
     private List<String> tags;
 
-    Image(String name, String path, List<String> tags)
+    public Image(String name, String path, List<String> tags)
     {
         this.setName(name);
         this.setPath(path);
