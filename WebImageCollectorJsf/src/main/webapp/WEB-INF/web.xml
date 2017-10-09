@@ -22,7 +22,7 @@
 
   <servlet>
     <servlet-name>main.FileServlet</servlet-name>
-    <servlet-class>main.FileServlet</servlet-class>
+    <servlet-class>FileServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>main.FileServlet</servlet-name>
