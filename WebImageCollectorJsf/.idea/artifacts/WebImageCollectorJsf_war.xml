@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="WebImageCollectorJsf:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="WebImageCollector.war">
+      <element id="artifact" artifact-name="WebImageCollectorJsf:war exploded" />
+    </root>
+  </artifact>
+</component>

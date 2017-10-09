@@ -1,0 +1,70 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+        template="template.xhtml">
+    <ui:param name="pageTitle" value="Main"/>
+    <ui:define name="content">
+        <title>Image Collector</title>
+    <h:form>
+        <h:outputLabel id="Greeting" value="Hello, dude!"/>
+        <h:panelGroup id="ImageTable">
+            <div>
+                <table width="100%" style="height: 500px;">
+                    <tbody>
+                        <tr>
+                            <td width="20%" >
+                                <p:panel header="Display type">
+                                    <p:accordionPanel id="ImageList" multiple="false" style="height: 500px">
+                                        <p:tab title="Collections"/>
+                                        <p:tab title="Tags"/>
+                                    </p:accordionPanel>
+                                </p:panel>
+                            </td>
+                            <td width="80%">
+                                <p:panel header="Images">
+                                    <p:dataGrid  var="image" value="#{BasicView.images}" style="border-color: aqua; max-height: 500px;"
+                                        rows="6" paginator="true" id="ImageGrid" paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}">
+                                            <p:panel>
+                                                <p:commandLink update="@form" oncomplete="PF('ImagePopup').show()" title="Expand picture">
+                                                    <h:graphicImage id="graphicImage"  style="max-height: 200px; max-width: 200px" value="resources/#{image.path}"/>
+                                                    <p:tooltip for="graphicImage" position="right">
+                                                        <h:outputText value="#{image.name}"/>
+                                                        <div>
+                                                            <h:outputText value="Tags: #{image.tags}"/>
+                                                        </div>
+                                                    </p:tooltip>
+                                                    <f:setPropertyActionListener value="#{image}" target="#{BasicView.selectedImage}"/>
+                                                 </p:commandLink>
+                                                    <p:menuButton>
+                                                        <p:menuitem value="Delete" actionListener="#{BasicView.deleteSelectedImage(image)}" update="@form"/>
+                                                    </p:menuButton>
+                                            </p:panel>
+                                    </p:dataGrid>
+                                </p:panel>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </h:panelGroup>
+        <p:fileUpload fileUploadListener="#{BasicView.uploadFile}" update="@form" auto="true" multiple="true" style="width: 10%"/>
+
+        <p:dialog widgetVar="ImagePopup" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:graphicImage id="FullgraphicImage"  style="max-height: 100%; max-width: 100%" value="resources/#{BasicView.selectedImage.path}"/>
+        </p:dialog>
+
+    </h:form>
+        <h:form enctype="multipart/form-data">
+            <h:panelGrid columns="3">
+                <h:outputText value="Keyup: " />
+                <p:inputText id="counter" value="#{BasicView.text}">
+                    <p:ajax event="keyup" update="out" listener="#{BasicView.handleKeyEvent}" />
+                </p:inputText>
+                <h:outputText id="out" value="#{BasicView.text}" />
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
