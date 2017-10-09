@@ -1,4 +1,4 @@
-package main.java.view;
+package view;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;

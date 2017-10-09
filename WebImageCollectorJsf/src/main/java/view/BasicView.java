@@ -1,7 +1,7 @@
-package main.java.view;
+package view;
 
-import main.java.model.Image;
-import main.java.controller.ImageService;
+import model.Image;
+import controller.ImageService;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 

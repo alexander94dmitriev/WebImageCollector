@@ -1,6 +1,6 @@
-package main.java.controller;
+package controller;
 
-import main.java.model.Image;
+import model.Image;
 import org.primefaces.model.UploadedFile;
 
 import javax.faces.bean.ManagedBean;

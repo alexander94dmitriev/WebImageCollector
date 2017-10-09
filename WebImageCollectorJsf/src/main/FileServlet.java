@@ -93,11 +93,15 @@ public class FileServlet extends HttpServlet {
             while ((length = input.read(buffer)) > 0) {
                 output.write(buffer, 0, length);
             }
+        } catch (FileNotFoundException ex) {
+            // Do your thing with the exception. Print it, log it or mail it.
+            System.out.println("Something went wrong working with input/output streams in FileServlet:" + ex.getMessage());
         } finally {
             // Gently close streams.
             close(output);
             close(input);
         }
+
     }
 
     // Helpers (can be refactored to public utility class) ----------------------------------------
