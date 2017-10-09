@@ -13,7 +13,7 @@ import java.net.URLDecoder;
  * @author BalusC
  * @link http://balusc.blogspot.com/2007/07/fileservlet.html
  */
-@WebServlet("/resources/images/")
+@WebServlet("/resources/images/*")
 public class FileServlet extends HttpServlet {
 
     // Constants ----------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ public class FileServlet extends HttpServlet {
     public void init() throws ServletException {
 
         // Define base path somehow. You can define it as init-param of the servlet.
-        this.filePath = "c:/images";
+        this.filePath = "c:/images/";
 
         // In a Windows environment with the Applicationserver running on the
         // c: volume, the above path is exactly the same as "c:\files".

@@ -80,8 +80,7 @@ public class ImageService {
         try {
             InputStream in = file.getInputstream();
             String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
-            projectPath = projectPath.replace("out\\artifacts\\JavaEESample\\","web\\resources\\images\\");
-            projectPath = "c:/images/";
+            projectPath = "c:/images/images/";
             File f = new File(projectPath + file.getFileName());
             f.createNewFile();
             FileOutputStream out = new FileOutputStream(f);
@@ -98,12 +97,11 @@ public class ImageService {
             in.close();
 
             String imageName = f.getName();
-            int dotIndex = imageName.lastIndexOf(".");
+            int dotIndex = f.getName().lastIndexOf(".");
             imageName = imageName.replace(imageName.substring(dotIndex),"");
+            int anotherDotIndex = f.getPath().lastIndexOf(".");
+            String imagePath = "/images/" + f.getName();
 
-            String imagePath = f.getPath();
-            imagePath = imagePath.substring(imagePath.indexOf("\\images"));
-            imagePath = imagePath.replace("\\","/");
             Image image = new Image(imageName,imagePath,null);
             addImageToList(image);
 
@@ -118,8 +116,8 @@ public class ImageService {
     public void addImageToList(Image image)
     {
         String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
-        projectPath = projectPath.replace("out\\artifacts\\JavaEESample\\","");
-        File f = new File(projectPath + "imageData.txt");
+        //projectPath = projectPath.replace("out\\artifacts\\JavaEESample\\","");
+        File f = new File(projectPath + "\\imageData.txt");
 
         try {
             PrintWriter out = new PrintWriter(new FileWriter(f, true));
@@ -139,8 +137,8 @@ public class ImageService {
         allImages.remove(image);
 
         String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
-        projectPath = projectPath.replace("out\\artifacts\\JavaEESample\\","");
-        File f = new File(projectPath + "imageData.txt");
+        //projectPath = projectPath.replace("out\\artifacts\\JavaEESample\\","");
+        File f = new File(projectPath + "\\imageData.txt");
 
         File newFile = new File(f.getAbsolutePath()+".tmp");
 

@@ -26,7 +26,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>main.FileServlet</servlet-name>
-    <url-pattern>/resources/images/</url-pattern>
+    <url-pattern>/resources/*</url-pattern>
   </servlet-mapping>
   <listener>
     <listener-class>com.sun.faces.config.ConfigureListener</listener-class>

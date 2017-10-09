@@ -1,5 +1,3 @@
 BG98A;/images/BG98A.png;None
 BG98N1;/images/BG98N1.png;None
 BG98N2;/images/BG98N2.png;None
-
-settings-512;/images/settings-512.png;None
