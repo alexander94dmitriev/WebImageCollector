@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Title</title>
+</h:head>
+
+<h:body>
+    <table>
+        <tr>
+            <td width="30%">
+                <h:outputLabel id="Greeting" value="Web Image Collector" styleClass="greeting"/>
+            </td>
+            <td width="43%">
+            </td>
+            <td width="2%">
+                <p:commandLink actionListener="#{BasicView.searchAction}" styleClass="buttonStyle" type="buttton" update="mainForm">
+                    <p:graphicImage value="resources/images/images/search-icon.png" style="max-height: 30px; max-width: 30px;"/>
+                </p:commandLink>
+            </td>
+            <td width="20%">
+                <p:inputText placeholder="Search for Images" style="width: 98%" value="#{BasicView.searchString}"/>
+            </td>
+            <td width="5%">
+                <p:selectOneMenu value="#{BasicView.searchStringSelected}">
+                    <f:selectItem itemLabel="By name" itemValue="name" />
+                    <f:selectItem itemLabel="By tags" itemValue="tags" />
+                    <f:selectItem itemLabel="Collections" itemValue="collections" />
+                </p:selectOneMenu>
+            </td>
+        </tr>
+    </table>
+</h:body>
+
+</html>

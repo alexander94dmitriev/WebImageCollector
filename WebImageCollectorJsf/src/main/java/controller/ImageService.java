@@ -137,7 +137,6 @@ public class ImageService {
         allImages.remove(image);
 
         String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
-        //projectPath = projectPath.replace("out\\artifacts\\JavaEESample\\","");
         File f = new File(projectPath + "\\imageData.txt");
 
         File newFile = new File(f.getAbsolutePath()+".tmp");
@@ -150,6 +149,7 @@ public class ImageService {
             while ((readLine = b.readLine()) != null) {
                 if(readLine.contains(image.getName()))
                     continue;
+
                 if(!readLine.isEmpty()) {
                     writer.println(readLine);
                     writer.flush();
@@ -174,5 +174,88 @@ public class ImageService {
         }
 
         return allImages;
+    }
+
+    public void addTagToImage(Image image, String tag) {
+        String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
+        File f = new File(projectPath + "\\imageData.txt");
+
+        File newFile = new File(f.getAbsolutePath()+".tmp");
+
+        try {
+            BufferedReader b = new BufferedReader(new FileReader(f));
+            PrintWriter writer = new PrintWriter(new FileWriter(newFile));
+            String readLine = "";
+
+            while ((readLine = b.readLine()) != null) {
+                if(readLine.contains(image.getName())) {
+                    StringBuilder builder = new StringBuilder();
+                    builder.append(readLine);
+                    builder.append(tag+";");
+                    writer.println(builder.toString());
+                    writer.flush();
+                    continue;
+                }
+
+                    writer.println(readLine);
+                    writer.flush();
+                readLine = null;
+            }
+
+            b.close();
+            writer.close();
+            System.gc();
+
+            if(!f.delete()) {
+                throw new IOException("Cannot delete old imageData file");
+            }
+
+            if(!newFile.renameTo(f)) {
+                throw new IOException("Cannot rename new imageData file");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeTagFromImage(Image image, String tag) {
+        String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
+        File f = new File(projectPath + "\\imageData.txt");
+
+        File newFile = new File(f.getAbsolutePath()+".tmp");
+
+        try {
+            BufferedReader b = new BufferedReader(new FileReader(f));
+            PrintWriter writer = new PrintWriter(new FileWriter(newFile));
+            String readLine = "";
+
+            while ((readLine = b.readLine()) != null) {
+                if(readLine.contains(image.getName())) {
+                    String newReadLine = readLine.replace(tag+";","");
+                    writer.println(newReadLine);
+                    writer.flush();
+                    continue;
+                }
+                writer.println(readLine);
+                writer.flush();
+                readLine = null;
+            }
+
+            b.close();
+            writer.close();
+            System.gc();
+
+            if(!f.delete()) {
+                throw new IOException("Cannot delete old imageData file");
+            }
+
+            if(!newFile.renameTo(f)) {
+                throw new IOException("Cannot rename new imageData file");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

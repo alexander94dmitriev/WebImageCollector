@@ -8,11 +8,11 @@
     <ui:param name="pageTitle" value="Main"/>
     <ui:define name="content">
         <title>Image Collector</title>
-    <h:form>
-        <h:outputLabel id="Greeting" value="Hello, dude!"/>
+        <ui:include src="mainPageTop.xhtml"/>
+    <h:form id="mainForm">
         <h:panelGroup id="ImageTable">
             <div>
-                <table width="100%" style="height: 500px;">
+                <table id="mainPageTable" width="100%">
                     <tbody>
                         <tr>
                             <td width="20%" >
@@ -25,8 +25,8 @@
                             </td>
                             <td width="80%">
                                 <p:panel header="Images">
-                                    <p:dataGrid  var="image" value="#{BasicView.images}" style="border-color: aqua; max-height: 500px;"
-                                        rows="6" paginator="true" id="ImageGrid" paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}">
+                                    <p:dataGrid var="image" value="#{BasicView.currentImages}" styleClass="dataTableStyle"
+                                                rows="6" paginator="true" id="ImageGrid" paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}">
                                             <p:panel>
                                                 <p:commandLink update="@form" oncomplete="PF('ImagePopup').show()" title="Expand picture">
                                                     <h:graphicImage id="graphicImage"  style="max-height: 200px; max-width: 200px" value="resources/#{image.path}"/>
@@ -38,9 +38,17 @@
                                                     </p:tooltip>
                                                     <f:setPropertyActionListener value="#{image}" target="#{BasicView.selectedImage}"/>
                                                  </p:commandLink>
-                                                    <p:menuButton>
-                                                        <p:menuitem value="Delete" actionListener="#{BasicView.deleteSelectedImage(image)}" update="@form"/>
-                                                    </p:menuButton>
+                                                    <div>
+                                                        <p:menuButton value="Options">
+                                                            <p:menuitem value="Delete" actionListener="#{BasicView.deleteSelectedImage(image)}" update="@form"/>
+                                                            <p:menuitem value="Add tag" oncomplete="PF('AddTagPopup').show()" update="@form">
+                                                                <f:setPropertyActionListener value="#{image}" target="#{BasicView.selectedImage}"/>
+                                                            </p:menuitem>
+                                                            <p:menuitem value="Remove tag" oncomplete="PF('RemoveTagPopup').show()" update="@form">
+                                                                <f:setPropertyActionListener value="#{image}" target="#{BasicView.selectedImage}"/>
+                                                            </p:menuitem>
+                                                        </p:menuButton>
+                                                    </div>
                                             </p:panel>
                                     </p:dataGrid>
                                 </p:panel>
@@ -56,15 +64,23 @@
             <h:graphicImage id="FullgraphicImage"  style="max-height: 100%; max-width: 100%" value="resources/#{BasicView.selectedImage.path}"/>
         </p:dialog>
 
+        <p:dialog widgetVar="AddTagPopup" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <p:inputText value="#{BasicView.addTag}"/>
+            <p:commandButton value="Add" actionListener="#{BasicView.addTagToSelectedImage}" oncomplete="PF('AddTagPopup').hide()" update="@form"/>
+            <div>
+                <h:outputText value="Add multiple tags with comma separator(e.g 'Nature, Space, Music')"/>
+            </div>
+        </p:dialog>
+
+        <p:dialog widgetVar="RemoveTagPopup" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <p:inputText value="#{BasicView.removeTag}"/>
+            <p:commandButton value="Remove" actionListener="#{BasicView.removeTagFromSelectedImage}" oncomplete="PF('RemoveTagPopup').hide()" update="@form"/>
+            <div>
+                <h:outputText value="Remove one tag from the list"/>
+                <h:outputText value="#{BasicView.selectedImage.tags}"/>
+            </div>
+        </p:dialog>
+
     </h:form>
-        <h:form enctype="multipart/form-data">
-            <h:panelGrid columns="3">
-                <h:outputText value="Keyup: " />
-                <p:inputText id="counter" value="#{BasicView.text}">
-                    <p:ajax event="keyup" update="out" listener="#{BasicView.handleKeyEvent}" />
-                </p:inputText>
-                <h:outputText id="out" value="#{BasicView.text}" />
-            </h:panelGrid>
-        </h:form>
     </ui:define>
 </ui:composition>

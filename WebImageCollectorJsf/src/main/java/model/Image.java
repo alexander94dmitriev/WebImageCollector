@@ -43,4 +43,12 @@ public class Image implements Serializable {
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
+
+    public void addNewTag(String tag) {
+        tags.add(tag);
+    }
+
+    public void removeTag(String tag) {
+        tags.remove(tag);
+    }
 }
