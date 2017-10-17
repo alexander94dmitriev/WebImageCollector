@@ -4,60 +4,15 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-        template="template.xhtml">
+      template="template.xhtml">
     <ui:param name="pageTitle" value="Main"/>
     <ui:define name="content">
         <title>Image Collector</title>
-        <ui:include src="mainPageTop.xhtml"/>
     <h:form id="mainForm">
-        <h:panelGroup id="ImageTable">
-            <div>
-                <table id="mainPageTable" width="100%">
-                    <tbody>
-                        <tr>
-                            <td width="20%" >
-                                <p:panel header="Display type">
-                                    <p:accordionPanel id="ImageList" multiple="false" style="height: 500px">
-                                        <p:tab title="Collections"/>
-                                        <p:tab title="Tags"/>
-                                    </p:accordionPanel>
-                                </p:panel>
-                            </td>
-                            <td width="80%">
-                                <p:panel header="Images">
-                                    <p:dataGrid var="image" value="#{BasicView.currentImages}" styleClass="dataTableStyle"
-                                                rows="6" paginator="true" id="ImageGrid" paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {PageLinks} {NextPageLink}">
-                                            <p:panel>
-                                                <p:commandLink update="@form" oncomplete="PF('ImagePopup').show()" title="Expand picture">
-                                                    <h:graphicImage id="graphicImage"  style="max-height: 200px; max-width: 200px" value="resources/#{image.path}"/>
-                                                    <p:tooltip for="graphicImage" position="right">
-                                                        <h:outputText value="#{image.name}"/>
-                                                        <div>
-                                                            <h:outputText value="Tags: #{image.tags}"/>
-                                                        </div>
-                                                    </p:tooltip>
-                                                    <f:setPropertyActionListener value="#{image}" target="#{BasicView.selectedImage}"/>
-                                                 </p:commandLink>
-                                                    <div>
-                                                        <p:menuButton value="Options">
-                                                            <p:menuitem value="Delete" actionListener="#{BasicView.deleteSelectedImage(image)}" update="@form"/>
-                                                            <p:menuitem value="Add tag" oncomplete="PF('AddTagPopup').show()" update="@form">
-                                                                <f:setPropertyActionListener value="#{image}" target="#{BasicView.selectedImage}"/>
-                                                            </p:menuitem>
-                                                            <p:menuitem value="Remove tag" oncomplete="PF('RemoveTagPopup').show()" update="@form">
-                                                                <f:setPropertyActionListener value="#{image}" target="#{BasicView.selectedImage}"/>
-                                                            </p:menuitem>
-                                                        </p:menuButton>
-                                                    </div>
-                                            </p:panel>
-                                    </p:dataGrid>
-                                </p:panel>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </h:panelGroup>
+
+        <ui:include src="mainPageTop.xhtml"/>
+        <ui:include src="imageTable.xhtml"/>
+
         <p:fileUpload fileUploadListener="#{BasicView.uploadFile}" update="@form" auto="true" multiple="true" style="width: 10%"/>
 
         <p:dialog widgetVar="ImagePopup" modal="true" showEffect="fade" hideEffect="fade" resizable="false">

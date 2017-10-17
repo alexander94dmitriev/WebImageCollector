@@ -13,6 +13,8 @@ import javax.faces.event.ActionEvent;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @ManagedBean(name="BasicView")
@@ -29,12 +31,14 @@ public class BasicView implements Serializable {
     private Image selectedImage;
     private String searchString;
     private String searchStringSelected;
+    private List<String> searchStringListSelected;
 
     @PostConstruct
     public void init() {
         try {
             currentImages = imageService.initializeImageList();
             allImages = currentImages;
+            searchStringListSelected = Collections.unmodifiableList(Arrays.asList(new String[] {"By tags", "By collections", "By name"}));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,24 +55,30 @@ public class BasicView implements Serializable {
     }
 
     public void searchAction(ActionEvent actionEvent) {
-        if(searchStringSelected.equals("tags"))
+        if(searchString == null || searchString.isEmpty() || searchStringSelected == null)
+        {
+            currentImages = allImages;
+        }
+        else if(searchStringSelected.contains("tags"))
         {
             currentImages = new ArrayList<>();
+            String[] split = searchString.split(", ");
             for(Image image: allImages)
             {
-                if(image.getTags().contains(searchString))
+                for(int i = 0; i < split.length; ++i)
+                if(image.getTags().contains(split[i]))
                 {
                     currentImages.add(image);
                 }
             }
         }
-        else if(searchStringSelected.equals("collections"))
+        else if(searchStringSelected.contains("collections"))
         {
 
         }
-        else if (searchStringSelected.equals("name"))
+        else if(searchStringSelected.contains("name"))
         {
-            currentImages = allImages;
+
         }
     }
 
@@ -128,6 +138,11 @@ public class BasicView implements Serializable {
                 }
             }
         }
+        try {
+            allImages = imageService.initializeImageList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeTagFromSelectedImage() {
@@ -145,6 +160,11 @@ public class BasicView implements Serializable {
                     imageService.removeTagFromImage(image, split[i]);
                 }
             }
+        }
+        try {
+            allImages = imageService.initializeImageList();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -182,5 +202,9 @@ public class BasicView implements Serializable {
 
     public void setRemoveTag(String removeTag) {
         this.removeTag = removeTag;
+    }
+
+    public List<String> getSearchStringListSelected() {
+        return searchStringListSelected;
     }
 }

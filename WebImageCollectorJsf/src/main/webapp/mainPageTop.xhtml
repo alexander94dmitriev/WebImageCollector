@@ -4,15 +4,11 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-<h:head>
-    <title>Title</title>
-</h:head>
-
 <h:body>
     <table>
         <tr>
             <td width="30%">
-                <h:outputLabel id="Greeting" value="Web Image Collector" styleClass="greeting"/>
+                <h:outputLabel id="Greeting" value="Web Image Collector" style="font-size: 300%; font-family: Algerian; color: aliceblue;"/>
             </td>
             <td width="43%">
             </td>
@@ -26,9 +22,9 @@
             </td>
             <td width="5%">
                 <p:selectOneMenu value="#{BasicView.searchStringSelected}">
-                    <f:selectItem itemLabel="By name" itemValue="name" />
-                    <f:selectItem itemLabel="By tags" itemValue="tags" />
-                    <f:selectItem itemLabel="Collections" itemValue="collections" />
+                    <f:selectItem itemLabel="Select" itemDisabled="true"/>
+                    <f:selectItems value="#{BasicView.searchStringListSelected}"/>
+                    <p:ajax event="change" update="@this" />
                 </p:selectOneMenu>
             </td>
         </tr>
