@@ -12,8 +12,15 @@
                         <td width="20%" >
                             <p:panel header="Display type">
                                 <p:accordionPanel id="ImageList" multiple="false" style="height: 500px">
-                                    <p:tab title="Collections"/>
-                                    <p:tab title="Tags"/>
+                                    <p:tab title="Collections">
+                                        <p:dataList value="#{BasicView.allCollections}"/>
+                                        <p:commandButton value="Add new Collection"/>
+                                    </p:tab>
+                                    <p:tab title="Tags">
+                                        <p:dataList value="#{BasicView.allTags}" var="tag">
+                                                <p:outputLabel value="#{tag}"/>
+                                        </p:dataList>
+                                    </p:tab>
                                 </p:accordionPanel>
                             </p:panel>
                         </td>

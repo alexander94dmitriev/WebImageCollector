@@ -61,6 +61,24 @@ public class ImageService {
         return allImages;
     }
 
+    public List<String> initializeAllTagsList() {
+        List<String> allTags = new ArrayList<>();
+
+        for(Image image: allImages)
+        {
+            for(String tag: image.getTags())
+            {
+                if(!allTags.contains(tag))
+                {
+                    allTags.add(tag);
+                }
+            }
+        }
+
+        return allTags;
+    }
+
+
     public List<Image> getAllImages() {
         return allImages;
     }
@@ -257,5 +275,42 @@ public class ImageService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Image> searchImages(String searchString, String searchStringSelected) {
+        List<Image> currentImages = new ArrayList<>();
+        if(searchString == null || searchString.isEmpty() || searchStringSelected == null)
+        {
+            currentImages = allImages;
+        }
+        else if(searchStringSelected.contains("tags"))
+        {
+            currentImages = new ArrayList<>();
+            String[] split = searchString.split(", ");
+            for(Image image: allImages)
+            {
+                for(int i = 0; i < split.length; ++i)
+                    if(image.getTags().contains(split[i]))
+                    {
+                        currentImages.add(image);
+                    }
+            }
+        }
+        else if(searchStringSelected.contains("collections"))
+        {
+
+        }
+        else if(searchStringSelected.contains("name"))
+        {
+            for(Image image: allImages)
+            {
+                if(image.getName().contains(searchString))
+                {
+                    currentImages.add(image);
+                }
+            }
+        }
+
+        return currentImages;
     }
 }

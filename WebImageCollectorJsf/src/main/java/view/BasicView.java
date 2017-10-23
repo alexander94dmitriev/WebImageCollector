@@ -6,13 +6,14 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +24,8 @@ public class BasicView implements Serializable {
 
     @ManagedProperty("#{imageService}")
     private ImageService imageService;
+    private List<String> allCollections;
+    private List<String> allTags;
     private List<Image> currentImages;
     private List<Image> allImages;
     private List<String> tagsList;
@@ -37,8 +40,9 @@ public class BasicView implements Serializable {
     public void init() {
         try {
             currentImages = imageService.initializeImageList();
-            allImages = currentImages;
+            setAllImages(currentImages);
             searchStringListSelected = Collections.unmodifiableList(Arrays.asList(new String[] {"By tags", "By collections", "By name"}));
+            allTags = imageService.initializeAllTagsList();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,37 +53,15 @@ public class BasicView implements Serializable {
         imageService.uploadImage(file);
         try {
             currentImages = imageService.initializeImageList();
+            FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void searchAction(ActionEvent actionEvent) {
-        if(searchString == null || searchString.isEmpty() || searchStringSelected == null)
-        {
-            currentImages = allImages;
-        }
-        else if(searchStringSelected.contains("tags"))
-        {
-            currentImages = new ArrayList<>();
-            String[] split = searchString.split(", ");
-            for(Image image: allImages)
-            {
-                for(int i = 0; i < split.length; ++i)
-                if(image.getTags().contains(split[i]))
-                {
-                    currentImages.add(image);
-                }
-            }
-        }
-        else if(searchStringSelected.contains("collections"))
-        {
-
-        }
-        else if(searchStringSelected.contains("name"))
-        {
-
-        }
+        currentImages = imageService.searchImages(searchString, searchStringSelected);
     }
 
     public String getSearchString() {
@@ -139,7 +121,8 @@ public class BasicView implements Serializable {
             }
         }
         try {
-            allImages = imageService.initializeImageList();
+            setAllImages(imageService.initializeImageList());
+            allTags = imageService.initializeAllTagsList();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -162,7 +145,8 @@ public class BasicView implements Serializable {
             }
         }
         try {
-            allImages = imageService.initializeImageList();
+            setAllImages(imageService.initializeImageList());
+            allTags = imageService.initializeAllTagsList();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -206,5 +190,29 @@ public class BasicView implements Serializable {
 
     public List<String> getSearchStringListSelected() {
         return searchStringListSelected;
+    }
+
+    public List<String> getAllCollections() {
+        return allCollections;
+    }
+
+    public void setAllCollections(List<String> allCollections) {
+        this.allCollections = allCollections;
+    }
+
+    public List<String> getAllTags() {
+        return allTags;
+    }
+
+    public void setAllTags(List<String> allTags) {
+        this.allTags = allTags;
+    }
+
+    public List<Image> getAllImages() {
+        return allImages;
+    }
+
+    public void setAllImages(List<Image> allImages) {
+        this.allImages = allImages;
     }
 }

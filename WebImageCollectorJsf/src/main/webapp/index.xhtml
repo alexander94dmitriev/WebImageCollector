@@ -10,10 +10,13 @@
         <title>Image Collector</title>
     <h:form id="mainForm">
 
+        <p:growl id="messages" showDetail="true" />
+
         <ui:include src="mainPageTop.xhtml"/>
         <ui:include src="imageTable.xhtml"/>
 
-        <p:fileUpload fileUploadListener="#{BasicView.uploadFile}" update="@form" auto="true" multiple="true" style="width: 10%"/>
+        <p:fileUpload fileUploadListener="#{BasicView.uploadFile}" value="Upload new Image" dragDropSupport="true" update="@form" auto="true" multiple="true" style="width: 10%"/>
+
 
         <p:dialog widgetVar="ImagePopup" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <h:graphicImage id="FullgraphicImage"  style="max-height: 100%; max-width: 100%" value="resources/#{BasicView.selectedImage.path}"/>
