@@ -1,6 +1,7 @@
 package view;
 
 import controller.ImageService;
+import model.Collection;
 import model.Image;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -14,6 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -24,17 +26,23 @@ public class BasicView implements Serializable {
 
     @ManagedProperty("#{imageService}")
     private ImageService imageService;
-    private List<String> allCollections;
+    private List<Collection> allCollections;
     private List<String> allTags;
     private List<Image> currentImages;
     private List<Image> allImages;
     private List<String> tagsList;
+
     private String addTag;
     private String removeTag;
     private Image selectedImage;
+
     private String searchString;
     private String searchStringSelected;
     private List<String> searchStringListSelected;
+
+    private String newCollection;
+    private Collection selectedCollection;
+    private Boolean imageToCollectionMode;
 
     @PostConstruct
     public void init() {
@@ -53,7 +61,7 @@ public class BasicView implements Serializable {
         imageService.uploadImage(file);
         try {
             currentImages = imageService.initializeImageList();
-            FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+            FacesMessage message = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,7 +69,7 @@ public class BasicView implements Serializable {
     }
 
     public void searchAction(ActionEvent actionEvent) {
-        currentImages = imageService.searchImages(searchString, searchStringSelected);
+        currentImages = imageService.searchImages(searchString, searchStringSelected, allCollections);
     }
 
     public String getSearchString() {
@@ -192,11 +200,11 @@ public class BasicView implements Serializable {
         return searchStringListSelected;
     }
 
-    public List<String> getAllCollections() {
+    public List<Collection> getAllCollections() {
         return allCollections;
     }
 
-    public void setAllCollections(List<String> allCollections) {
+    public void setAllCollections(List<Collection> allCollections) {
         this.allCollections = allCollections;
     }
 
@@ -214,5 +222,65 @@ public class BasicView implements Serializable {
 
     public void setAllImages(List<Image> allImages) {
         this.allImages = allImages;
+    }
+
+    public String getNewCollection() {
+        return newCollection;
+    }
+
+    public void setNewCollection(String newCollection) {
+        this.newCollection = newCollection;
+    }
+
+    public void addNewCollection() {
+        if (allCollections == null) {
+            allCollections = new ArrayList<>();
+        }
+
+        allCollections.add(new Collection(newCollection));
+    }
+
+    public Boolean getImageToCollectionMode() {
+        return imageToCollectionMode;
+    }
+
+    public void setImageToCollectionMode(Boolean imageToCollectionMode) {
+        this.imageToCollectionMode = imageToCollectionMode;
+    }
+
+    public void deleteSelectedCollection(Collection collection) {
+        allCollections.remove(collection);
+    }
+
+    public void addImagetoSelectedList(Image image) {
+        List<Image> images = selectedCollection.getImages();
+
+        if (images == null || !images.contains(image)) {
+            selectedCollection.addImage(image);
+        } else {
+            selectedCollection.removeImage(image);
+        }
+    }
+
+    public Collection getSelectedCollection() {
+        return selectedCollection;
+    }
+
+    public void setSelectedCollection(Collection selectedCollection) {
+        this.selectedCollection = selectedCollection;
+    }
+
+    public void addNewCollectionToList() {
+        for (Collection collection : allCollections) {
+            if (collection.getName().equals(selectedCollection.getName())) {
+                allCollections.remove(collection);
+                allCollections.add(selectedCollection);
+                break;
+            }
+        }
+    }
+
+    public void cancelCollectionUpdate() {
+        selectedCollection = null;
     }
 }

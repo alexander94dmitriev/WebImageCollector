@@ -11,10 +11,27 @@
                     <tr>
                         <td width="20%" >
                             <p:panel header="Display type">
+                                <p:fileUpload fileUploadListener="#{BasicView.uploadFile}" value="Upload new Image"
+                                              dragDropSupport="true" update="@form" auto="true" multiple="true"
+                                              style="width: 10%"/>
                                 <p:accordionPanel id="ImageList" multiple="false" style="height: 500px">
                                     <p:tab title="Collections">
-                                        <p:dataList value="#{BasicView.allCollections}"/>
-                                        <p:commandButton value="Add new Collection"/>
+                                        <p:dataList value="#{BasicView.allCollections}" var="collection">
+                                            <p:outputLabel value="#{collection.name}"/>
+                                            <p:menuButton value="">
+                                                <p:menuitem value="Delete"
+                                                            actionListener="#{BasicView.deleteSelectedCollection(collection)}"
+                                                            update="@form"/>
+                                                <p:menuitem value="Add images" update="@form">
+                                                    <f:setPropertyActionListener value="true"
+                                                                                 target="#{BasicView.imageToCollectionMode}"/>
+                                                    <f:setPropertyActionListener value="#{collection}"
+                                                                                 target="#{BasicView.selectedCollection}"/>
+                                                </p:menuitem>
+                                            </p:menuButton>
+                                        </p:dataList>
+                                        <p:commandButton value="Add new Collection"
+                                                         oncomplete="PF('AddCollectionPopup').show()"/>
                                     </p:tab>
                                     <p:tab title="Tags">
                                         <p:dataList value="#{BasicView.allTags}" var="tag">
@@ -49,6 +66,9 @@
                                                     <f:setPropertyActionListener value="#{image}" target="#{BasicView.selectedImage}"/>
                                                 </p:menuitem>
                                             </p:menuButton>
+                                            <p:selectBooleanCheckbox rendered="#{BasicView.imageToCollectionMode}">
+                                                <f:ajax listener="#{BasicView.addImagetoSelectedList(image)}"/>
+                                            </p:selectBooleanCheckbox>
                                         </div>
                                     </p:panel>
                                 </p:dataGrid>

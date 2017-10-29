@@ -15,8 +15,14 @@
         <ui:include src="mainPageTop.xhtml"/>
         <ui:include src="imageTable.xhtml"/>
 
-        <p:fileUpload fileUploadListener="#{BasicView.uploadFile}" value="Upload new Image" dragDropSupport="true" update="@form" auto="true" multiple="true" style="width: 10%"/>
-
+        <p:commandButton value="Save Collection" actionListener="#{BasicView.addNewCollectionToList}" update="@form"
+                         rendered="#{BasicView.imageToCollectionMode}">
+            <f:setPropertyActionListener value="false" target="#{BasicView.imageToCollectionMode}"/>
+        </p:commandButton>
+        <p:commandButton value="Cancel" actionListener="#{BasicView.cancelCollectionUpdate}" update="@form"
+                         rendered="#{BasicView.imageToCollectionMode}">
+            <f:setPropertyActionListener value="false" target="#{BasicView.imageToCollectionMode}"/>
+        </p:commandButton>
 
         <p:dialog widgetVar="ImagePopup" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <h:graphicImage id="FullgraphicImage"  style="max-height: 100%; max-width: 100%" value="resources/#{BasicView.selectedImage.path}"/>
@@ -37,6 +43,12 @@
                 <h:outputText value="Remove one tag from the list"/>
                 <h:outputText value="#{BasicView.selectedImage.tags}"/>
             </div>
+        </p:dialog>
+
+        <p:dialog widgetVar="AddCollectionPopup" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <p:inputText value="#{BasicView.newCollection}" placeholder="Enter a Collection Name"/>
+            <p:commandButton value="Add" actionListener="#{BasicView.addNewCollection}"
+                             oncomplete="PF('AddCollectionPopup').hide()" update="@form"/>
         </p:dialog>
 
     </h:form>

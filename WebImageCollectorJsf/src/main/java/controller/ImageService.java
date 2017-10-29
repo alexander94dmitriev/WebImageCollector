@@ -1,5 +1,6 @@
 package controller;
 
+import model.Collection;
 import model.Image;
 import org.primefaces.model.UploadedFile;
 
@@ -277,7 +278,7 @@ public class ImageService {
         }
     }
 
-    public List<Image> searchImages(String searchString, String searchStringSelected) {
+    public List<Image> searchImages(String searchString, String searchStringSelected, List<Collection> collections) {
         List<Image> currentImages = new ArrayList<>();
         if(searchString == null || searchString.isEmpty() || searchStringSelected == null)
         {
@@ -298,7 +299,12 @@ public class ImageService {
         }
         else if(searchStringSelected.contains("collections"))
         {
-
+            for (Collection collection : collections) {
+                if (collection.getName().contains(searchString)) {
+                    currentImages = collection.getImages();
+                    break;
+                }
+            }
         }
         else if(searchStringSelected.contains("name"))
         {
