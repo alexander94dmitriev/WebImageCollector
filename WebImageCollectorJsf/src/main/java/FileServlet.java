@@ -39,7 +39,15 @@ public class FileServlet extends HttpServlet {
     {
         // Get requested file by path info.
         String requestedFile = request.getPathInfo();
+        String test = System.getProperty("user.home");
 
+        File directory = new File(test + "/images");
+        if(!directory.exists())
+        {
+            directory.mkdir();
+        }
+
+        filePath = test + "/images";
         // Check if file is actually supplied to the request URI.
         if (requestedFile == null) {
             // Do your thing if the file is not supplied to the request URI.

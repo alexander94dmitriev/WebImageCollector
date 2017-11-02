@@ -99,7 +99,8 @@ public class ImageService {
         try {
             InputStream in = file.getInputstream();
             String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
-            projectPath = "c:/images/images/";
+            //projectPath = "c:/images/images/";
+            projectPath = System.getProperty("user.home") + "/images/";
             File f = new File(projectPath + file.getFileName());
             f.createNewFile();
             FileOutputStream out = new FileOutputStream(f);
@@ -119,8 +120,8 @@ public class ImageService {
             int dotIndex = f.getName().lastIndexOf(".");
             imageName = imageName.replace(imageName.substring(dotIndex),"");
             int anotherDotIndex = f.getPath().lastIndexOf(".");
-            String imagePath = "/images/" + f.getName();
-
+            //String imagePath = "/images/" + f.getName();
+            String imagePath = f.getName();
             Image image = new Image(imageName,imagePath,null);
             addImageToList(image);
 
@@ -140,7 +141,7 @@ public class ImageService {
 
         try {
             PrintWriter out = new PrintWriter(new FileWriter(f, true));
-            out.append("\n"+image.getName()+";"+image.getPath()+";"+"None");
+            out.append(image.getName()+";"+image.getPath()+";");
             out.close();
         } catch (IOException e) {
             System.out.println("Unable to find an imageData.txt. Make sure to have it!");
@@ -152,9 +153,26 @@ public class ImageService {
     /*
     Delete the image from the list and remove the corresponding data from the imageData.txt
      */
-    public List<Image> deleteSelectedImage(Image image) {
+    public List<Image> deleteSelectedImage(Image image){
+
+        //remove from the list
         allImages.remove(image);
 
+        try {
+            //remove from the folder
+            String filePath = System.getProperty("user.home") + "/images/";
+            File imageFile = new File(filePath + image.getPath());
+
+            if (!imageFile.exists()) {
+                throw new IOException("Unable to delete file: " + imageFile.getName());
+            } else {
+                imageFile.delete();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //remove from the file. Should make a new text file
         String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
         File f = new File(projectPath + "\\imageData.txt");
 
