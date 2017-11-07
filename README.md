@@ -1,4 +1,4 @@
-# WebImageCollector
+# Web Image Collector
 
 This project is the practice of creating a RESTful Web Application based on Java Server Faces (JSF) framework. 
 
