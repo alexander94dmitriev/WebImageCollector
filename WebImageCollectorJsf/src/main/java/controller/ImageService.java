@@ -141,7 +141,7 @@ public class ImageService {
 
         try {
             PrintWriter out = new PrintWriter(new FileWriter(f, true));
-            out.append(image.getName()+";"+image.getPath()+";");
+            out.append("\n" + image.getName() + ";/" + image.getPath() + ";");
             out.close();
         } catch (IOException e) {
             System.out.println("Unable to find an imageData.txt. Make sure to have it!");
@@ -226,13 +226,15 @@ public class ImageService {
 
             while ((readLine = b.readLine()) != null) {
                 if(readLine.contains(image.getName())) {
-                    StringBuilder builder = new StringBuilder();
-                    builder.append(readLine);
-                    builder.append(tag+";");
-                    writer.println(builder.toString());
+                    String temp = b.readLine();
+                    String finalString = readLine + tag + ";" + "\n";
+                    writer.write(finalString);
                     writer.flush();
                     continue;
                 }
+
+                if (readLine.isEmpty())
+                    continue;
 
                     writer.println(readLine);
                     writer.flush();

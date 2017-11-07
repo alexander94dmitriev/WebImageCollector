@@ -24,6 +24,17 @@ public class FileServlet extends HttpServlet {
 
     // Actions ------------------------------------------------------------------------------------
 
+    private static void close(Closeable resource) {
+        if (resource != null) {
+            try {
+                resource.close();
+            } catch (IOException e) {
+                // Do your thing with the exception. Print it, log it or mail it.
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void init() throws ServletException {
 
         // Define base path somehow. You can define it as init-param of the servlet.
@@ -33,6 +44,8 @@ public class FileServlet extends HttpServlet {
         // c: volume, the above path is exactly the same as "c:\files".
         // In UNIX, it is just straightforward "/files".
     }
+
+    // Helpers (can be refactored to public utility class) ----------------------------------------
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
@@ -88,6 +101,10 @@ public class FileServlet extends HttpServlet {
         BufferedInputStream input = null;
         BufferedOutputStream output = null;
 
+        if (file.isDirectory()) {
+            return;
+        }
+
         try {
             // Open streams.
             input = new BufferedInputStream(new FileInputStream(file), DEFAULT_BUFFER_SIZE);
@@ -108,19 +125,6 @@ public class FileServlet extends HttpServlet {
             close(input);
         }
 
-    }
-
-    // Helpers (can be refactored to public utility class) ----------------------------------------
-
-    private static void close(Closeable resource) {
-        if (resource != null) {
-            try {
-                resource.close();
-            } catch (IOException e) {
-                // Do your thing with the exception. Print it, log it or mail it.
-                e.printStackTrace();
-            }
-        }
     }
 
 }

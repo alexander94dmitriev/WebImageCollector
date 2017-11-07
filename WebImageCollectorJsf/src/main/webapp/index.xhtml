@@ -15,6 +15,11 @@
         <ui:include src="mainPageTop.xhtml"/>
         <ui:include src="imageTable.xhtml"/>
 
+        <p:fileUpload fileUploadListener="#{BasicView.uploadFile}" value="Upload new Image"
+                      allowTypes="/(\.|\/)(png)$/"
+                      dragDropSupport="true" update="@form" auto="true" multiple="true"
+                      style="width: 10%"/>
+
         <p:commandButton value="Save Collection" actionListener="#{BasicView.addNewCollectionToList}" update="@form"
                          rendered="#{BasicView.imageToCollectionMode}">
             <f:setPropertyActionListener value="false" target="#{BasicView.imageToCollectionMode}"/>

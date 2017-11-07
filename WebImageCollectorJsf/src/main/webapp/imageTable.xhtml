@@ -11,9 +11,7 @@
                     <tr>
                         <td width="20%" >
                             <p:panel header="Display type">
-                                <p:fileUpload fileUploadListener="#{BasicView.uploadFile}" value="Upload new Image"
-                                              dragDropSupport="true" update="@form" auto="true" multiple="true"
-                                              style="width: 10%"/>
+
                                 <p:accordionPanel id="ImageList" multiple="false" style="height: 500px">
                                     <p:tab title="Collections">
                                         <p:dataList value="#{BasicView.allCollections}" var="collection">

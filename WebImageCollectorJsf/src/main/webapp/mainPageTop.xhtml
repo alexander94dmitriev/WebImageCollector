@@ -13,9 +13,9 @@
             <td width="43%">
             </td>
             <td width="2%">
-                <p:commandLink actionListener="#{BasicView.searchAction}" styleClass="buttonStyle" type="buttton" update="mainForm">
-                    <p:graphicImage value="resources/images/images/search-icon.png" style="max-height: 30px; max-width: 30px;"/>
-                </p:commandLink>
+                <p:commandButton value="Search" actionListener="#{BasicView.searchAction}" styleClass="buttonStyle"
+                                 type="buttton" update="mainForm">
+                </p:commandButton>
             </td>
             <td width="20%">
                 <p:inputText placeholder="Search for Images" style="width: 98%" value="#{BasicView.searchString}"/>
