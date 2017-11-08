@@ -7,7 +7,7 @@ The features of the app:
 - User can search images by three categores: by name of image, by specific tag, by collection
 - User can add/remove tags to the images.
 - User can make/remove a collections of images.
-- User can add/remove images from collections
+- User can add images to collections
 
 **Feature: User can upload PNG images**   
 Given: the app in the initial state having no images or preuploaded images discribed in a text file   
