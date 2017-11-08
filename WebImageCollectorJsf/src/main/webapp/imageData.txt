@@ -1,4 +1,3 @@
 BG98A;/BG98A.png;Stein's Gate;Obe;
 BG98N1;/BG98N1.png;
 BG98N2;/BG98N2.png;
-1234342;/1234342.PNG;

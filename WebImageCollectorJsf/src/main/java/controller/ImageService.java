@@ -33,7 +33,8 @@ public class ImageService {
         File f = new File(filePath+"\\imageData.txt");
         if (!f.exists())
         {
-            throw new IOException("File not found");
+            f.createNewFile();
+            return allImages;
         }
         BufferedReader b = new BufferedReader(new FileReader(f));
 
