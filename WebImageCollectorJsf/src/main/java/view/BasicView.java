@@ -41,6 +41,8 @@ public class BasicView implements Serializable {
     private List<String> searchStringListSelected;
 
     private String newCollection;
+    private String removeCollection;
+    private List<String> collectionNames;
     private Collection selectedCollection;
     private Boolean imageToCollectionMode;
 
@@ -55,6 +57,7 @@ public class BasicView implements Serializable {
             e.printStackTrace();
         }
     }
+
 
     public void uploadFile(FileUploadEvent event) {
         UploadedFile file = event.getFile();
@@ -131,6 +134,11 @@ public class BasicView implements Serializable {
         try {
             setAllImages(imageService.initializeImageList());
             allTags = imageService.initializeAllTagsList();
+
+
+            FacesMessage message = new FacesMessage("New tags were added to selected image");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -155,6 +163,10 @@ public class BasicView implements Serializable {
         try {
             setAllImages(imageService.initializeImageList());
             allTags = imageService.initializeAllTagsList();
+
+            FacesMessage message = new FacesMessage("New tags were deleted from selected image");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -238,6 +250,22 @@ public class BasicView implements Serializable {
         }
 
         allCollections.add(new Collection(newCollection));
+
+        FacesMessage message = new FacesMessage("Added new collection: " + newCollection);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void removeCollection() {
+        for (Collection collection : allCollections) {
+            if (collection.getName().equals(removeCollection)) {
+                allCollections.remove(collection);
+
+                FacesMessage message = new FacesMessage("Removed the collection: " + removeCollection);
+                FacesContext.getCurrentInstance().addMessage(null, message);
+
+                return;
+            }
+        }
     }
 
     public Boolean getImageToCollectionMode() {
@@ -283,4 +311,26 @@ public class BasicView implements Serializable {
     public void cancelCollectionUpdate() {
         selectedCollection = null;
     }
+
+    public String getRemoveCollection() {
+        return removeCollection;
+    }
+
+    public void setRemoveCollection(String removeCollection) {
+        this.removeCollection = removeCollection;
+    }
+
+    public List<String> getCollectionNames() {
+        List<String> result = new ArrayList<>();
+
+        if (allCollections == null)
+            return result;
+
+        for (Collection collection : allCollections) {
+            result.add(collection.getName());
+        }
+
+        return result;
+    }
+
 }

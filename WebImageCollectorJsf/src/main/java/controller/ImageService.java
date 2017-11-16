@@ -4,6 +4,7 @@ import model.Collection;
 import model.Image;
 import org.primefaces.model.UploadedFile;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -53,6 +54,7 @@ public class ImageService {
                 imageTags.add(split[i]);
             }
             Image image = new Image(imagename,imagePath,imageTags);
+
             allImages.add(image);
             readLine = null;
         }
@@ -102,6 +104,19 @@ public class ImageService {
             String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
             //projectPath = "c:/images/images/";
             projectPath = System.getProperty("user.home") + "/images/";
+
+            for (Image imageInList : allImages) {
+                String name = file.getFileName().replaceFirst("[.][^.]+$", "");
+
+                if (imageInList.getName().equals(name)) {
+                    FacesMessage message = new FacesMessage("The image already exists in the table");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+
+                    in.close();
+                    return;
+                }
+            }
+
             File f = new File(projectPath + file.getFileName());
             f.createNewFile();
             FileOutputStream out = new FileOutputStream(f);
@@ -118,6 +133,9 @@ public class ImageService {
             in.close();
 
             String imageName = f.getName();
+
+            //for(allImages)
+
             int dotIndex = f.getName().lastIndexOf(".");
             imageName = imageName.replace(imageName.substring(dotIndex),"");
             int anotherDotIndex = f.getPath().lastIndexOf(".");
@@ -211,6 +229,9 @@ public class ImageService {
             e.printStackTrace();
         }
 
+        FacesMessage message = new FacesMessage("The image: " + image.getName() + " deleted");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+
         return allImages;
     }
 
@@ -254,6 +275,9 @@ public class ImageService {
                 throw new IOException("Cannot rename new imageData file");
             }
 
+            FacesMessage message = new FacesMessage("The tag: " + tag + " was added to image: " + image.getName());
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -293,6 +317,10 @@ public class ImageService {
             if(!newFile.renameTo(f)) {
                 throw new IOException("Cannot rename new imageData file");
             }
+
+
+            FacesMessage message = new FacesMessage("The tag: " + tag + " deleted from image: " + image.getName());
+            FacesContext.getCurrentInstance().addMessage(null, message);
 
         } catch (IOException e) {
             e.printStackTrace();

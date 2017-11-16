@@ -30,6 +30,8 @@
                                         </p:dataList>
                                         <p:commandButton value="Add new Collection"
                                                          oncomplete="PF('AddCollectionPopup').show()"/>
+                                        <p:commandButton value="Remove Collection"
+                                                         oncomplete="PF('RemoveCollectionPopup').show()"/>
                                     </p:tab>
                                     <p:tab title="Tags">
                                         <p:dataList value="#{BasicView.allTags}" var="tag">

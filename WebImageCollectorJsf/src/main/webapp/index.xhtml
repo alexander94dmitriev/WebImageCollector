@@ -56,6 +56,16 @@
                              oncomplete="PF('AddCollectionPopup').hide()" update="@form"/>
         </p:dialog>
 
+        <p:dialog widgetVar="RemoveCollectionPopup" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <p:selectOneMenu value="#{BasicView.removeCollection}">
+                <f:selectItem itemLabel="Select" itemDisabled="true"/>
+                <f:selectItems value="#{BasicView.collectionNames}"/>
+                <p:ajax event="change" update="@this"/>
+            </p:selectOneMenu>
+            <p:commandButton value="Remove" actionListener="#{BasicView.removeCollection}"
+                             oncomplete="PF('RemoveCollectionPopup').hide()" update="@form"/>
+        </p:dialog>
+
     </h:form>
     </ui:define>
 </ui:composition>
