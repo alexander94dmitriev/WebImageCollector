@@ -1,0 +1,7 @@
+language: java
+
+before_script: cd WebImageCollectorJsf
+
+script:
+  - mvn --batch-mode verify
+  
