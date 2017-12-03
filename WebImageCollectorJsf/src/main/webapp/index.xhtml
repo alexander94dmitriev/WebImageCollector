@@ -42,7 +42,9 @@
         </p:dialog>
 
         <p:dialog widgetVar="RemoveTagPopup" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-            <p:inputText value="#{BasicView.removeTag}"/>
+            <p:selectOneMenu value="#{BasicView.removeTag}">
+                <f:selectItems value="#{BasicView.selectedImage.tags}"/>
+            </p:selectOneMenu>
             <p:commandButton value="Remove" actionListener="#{BasicView.removeTagFromSelectedImage}" oncomplete="PF('RemoveTagPopup').hide()" update="@form"/>
             <div>
                 <h:outputText value="Remove one tag from the list"/>

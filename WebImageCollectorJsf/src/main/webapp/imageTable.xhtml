@@ -17,9 +17,7 @@
                                         <p:dataList value="#{BasicView.allCollections}" var="collection">
                                             <p:outputLabel value="#{collection.name}"/>
                                             <p:menuButton value="">
-                                                <p:menuitem value="Delete"
-                                                            actionListener="#{BasicView.deleteSelectedCollection(collection)}"
-                                                            update="@form"/>
+                                                <!-- <p:menuitem value="Delete" actionListener="#{BasicView.deleteSelectedCollection(collection)}" update="@form"/> -->
                                                 <p:menuitem value="Add images" update="@form">
                                                     <f:setPropertyActionListener value="true"
                                                                                  target="#{BasicView.imageToCollectionMode}"/>
@@ -67,8 +65,15 @@
                                                 </p:menuitem>
                                             </p:menuButton>
                                             <p:selectBooleanCheckbox rendered="#{BasicView.imageToCollectionMode}">
-                                                <f:ajax listener="#{BasicView.addImagetoSelectedList(image)}"/>
+                                                <p:ajax listener="#{BasicView.addImagetoSelectedList(image)}"
+                                                        update="added: notAdded"/>
                                             </p:selectBooleanCheckbox>
+                                            <div>
+                                                <h:outputLabel id="added" value="Added"
+                                                               rendered="#{BasicView.imageToCollectionMode and BasicView.imageinSelectedList(image)}"/>
+                                                <h:outputLabel id="notAdded" value="Not added"
+                                                               rendered="#{BasicView.imageToCollectionMode and !BasicView.imageinSelectedList(image)}"/>
+                                            </div>
                                         </div>
                                     </p:panel>
                                 </p:dataGrid>

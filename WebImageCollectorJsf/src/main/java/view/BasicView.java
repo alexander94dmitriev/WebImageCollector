@@ -20,6 +20,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The is the main View class that allows to interact with UI in the browser
+ * It contains all of the important components such as
+ * - List of all images
+ * - List of Collections
+ * - search credentials
+ * - selected items such as search word, an image, tag or collection
+ */
 @ManagedBean(name="BasicView")
 @SessionScoped
 public class BasicView implements Serializable {
@@ -35,6 +43,7 @@ public class BasicView implements Serializable {
     private String addTag;
     private String removeTag;
     private Image selectedImage;
+    private String selectedTag;
 
     private String searchString;
     private String searchStringSelected;
@@ -46,6 +55,9 @@ public class BasicView implements Serializable {
     private Collection selectedCollection;
     private Boolean imageToCollectionMode;
 
+    /**
+     * Initialize the main components, prepare search keywords, upload images if any are already there
+     */
     @PostConstruct
     public void init() {
         try {
@@ -56,23 +68,6 @@ public class BasicView implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-
-    public void uploadFile(FileUploadEvent event) {
-        UploadedFile file = event.getFile();
-        imageService.uploadImage(file);
-        try {
-            currentImages = imageService.initializeImageList();
-            FacesMessage message = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void searchAction(ActionEvent actionEvent) {
-        currentImages = imageService.searchImages(searchString, searchStringSelected, allCollections);
     }
 
     public String getSearchString() {
@@ -113,63 +108,6 @@ public class BasicView implements Serializable {
 
     public void deleteSelectedImage(Image image) {
         currentImages = imageService.deleteSelectedImage(image);
-    }
-
-    public void addTagToSelectedImage() {
-        for(Image image: currentImages)
-        {
-            if(selectedImage.getName().equals(image.getName()))
-            {
-                String[] split = addTag.split(",");
-                for(int i = 0;  i < split.length; ++i)
-                {
-                    if(split[i].isEmpty())
-                        continue;
-
-                    image.addNewTag(split[i]);
-                    imageService.addTagToImage(image, split[i]);
-                }
-            }
-        }
-        try {
-            setAllImages(imageService.initializeImageList());
-            allTags = imageService.initializeAllTagsList();
-
-
-            FacesMessage message = new FacesMessage("New tags were added to selected image");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void removeTagFromSelectedImage() {
-        for(Image image: currentImages)
-        {
-            if(selectedImage.getName().equals(image.getName()))
-            {
-                String[] split = addTag.split(",");
-                for(int i = 0;  i < split.length; ++i)
-                {
-                    if(split[i].isEmpty())
-                        continue;
-
-                    image.removeTag(split[i]);
-                    imageService.removeTagFromImage(image, split[i]);
-                }
-            }
-        }
-        try {
-            setAllImages(imageService.initializeImageList());
-            allTags = imageService.initializeAllTagsList();
-
-            FacesMessage message = new FacesMessage("New tags were deleted from selected image");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public String getSearchStringSelected() {
@@ -244,30 +182,6 @@ public class BasicView implements Serializable {
         this.newCollection = newCollection;
     }
 
-    public void addNewCollection() {
-        if (allCollections == null) {
-            allCollections = new ArrayList<>();
-        }
-
-        allCollections.add(new Collection(newCollection));
-
-        FacesMessage message = new FacesMessage("Added new collection: " + newCollection);
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-
-    public void removeCollection() {
-        for (Collection collection : allCollections) {
-            if (collection.getName().equals(removeCollection)) {
-                allCollections.remove(collection);
-
-                FacesMessage message = new FacesMessage("Removed the collection: " + removeCollection);
-                FacesContext.getCurrentInstance().addMessage(null, message);
-
-                return;
-            }
-        }
-    }
-
     public Boolean getImageToCollectionMode() {
         return imageToCollectionMode;
     }
@@ -280,32 +194,12 @@ public class BasicView implements Serializable {
         allCollections.remove(collection);
     }
 
-    public void addImagetoSelectedList(Image image) {
-        List<Image> images = selectedCollection.getImages();
-
-        if (images == null || !images.contains(image)) {
-            selectedCollection.addImage(image);
-        } else {
-            selectedCollection.removeImage(image);
-        }
-    }
-
     public Collection getSelectedCollection() {
         return selectedCollection;
     }
 
     public void setSelectedCollection(Collection selectedCollection) {
         this.selectedCollection = selectedCollection;
-    }
-
-    public void addNewCollectionToList() {
-        for (Collection collection : allCollections) {
-            if (collection.getName().equals(selectedCollection.getName())) {
-                allCollections.remove(collection);
-                allCollections.add(selectedCollection);
-                break;
-            }
-        }
     }
 
     public void cancelCollectionUpdate() {
@@ -331,6 +225,155 @@ public class BasicView implements Serializable {
         }
 
         return result;
+    }
+
+    public String getSelectedTag() {
+        return selectedTag;
+    }
+
+    public void setSelectedTag(String selectedTag) {
+        this.selectedTag = selectedTag;
+    }
+
+    public void addNewCollectionToList() {
+        for (Collection collection : allCollections) {
+            if (collection.getName().equals(selectedCollection.getName())) {
+                allCollections.remove(collection);
+                allCollections.add(selectedCollection);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Add a selected Image to a list
+     *
+     * @param image
+     */
+    public void addImagetoSelectedList(Image image) {
+        List<Image> images = selectedCollection.getImages();
+
+        if (images == null || !images.contains(image)) {
+            selectedCollection.addImage(image);
+        } else {
+            selectedCollection.removeImage(image);
+        }
+    }
+
+    public boolean imageinSelectedList(Image image) {
+        if (selectedCollection == null) return false;
+        List<Image> images = selectedCollection.getImages();
+
+        if (images == null || !images.contains(image)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Create a new collection and add to an app
+     */
+    public void addNewCollection() {
+        if (allCollections == null) {
+            allCollections = new ArrayList<>();
+        }
+
+        allCollections.add(new Collection(newCollection));
+
+        FacesMessage message = new FacesMessage("Added new collection: " + newCollection);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    /**
+     * Remove a collection from the app
+     */
+    public void removeCollection() {
+        for (Collection collection : allCollections) {
+            if (collection.getName().equals(removeCollection)) {
+                allCollections.remove(collection);
+
+                FacesMessage message = new FacesMessage("Removed the collection: " + removeCollection);
+                FacesContext.getCurrentInstance().addMessage(null, message);
+
+                return;
+            }
+        }
+    }
+
+    /**
+     * Remove a tag from the selected image
+     */
+    public void removeTagFromSelectedImage() {
+        for (Image image : currentImages) {
+            if (selectedImage.getName().equals(image.getName())) {
+                image.removeTag(removeTag);
+                imageService.removeTagFromImage(image, removeTag);
+            }
+        }
+        try {
+            setAllImages(imageService.initializeImageList());
+            allTags = imageService.initializeAllTagsList();
+
+            //FacesMessage message = new FacesMessage("New tags were deleted from selected image");
+            //FacesContext.getCurrentInstance().addMessage(null, message);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Add a tag to a selected image
+     */
+    public void addTagToSelectedImage() {
+        for (Image image : currentImages) {
+            if (selectedImage.getName().equals(image.getName())) {
+                String[] split = addTag.split(",");
+                for (int i = 0; i < split.length; ++i) {
+                    if (split[i].isEmpty())
+                        continue;
+
+                    image.addNewTag(split[i]);
+                    imageService.addTagToImage(image, split[i]);
+                }
+            }
+        }
+        try {
+            setAllImages(imageService.initializeImageList());
+            allTags = imageService.initializeAllTagsList();
+
+
+            //FacesMessage message = new FacesMessage("New tags were added to selected image");
+            //FacesContext.getCurrentInstance().addMessage(null, message);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Upload image file to an app and make changes to textData
+     *
+     * @param event
+     */
+    public void uploadFile(FileUploadEvent event) {
+        UploadedFile file = event.getFile();
+        imageService.uploadImage(file);
+        try {
+            currentImages = imageService.initializeImageList();
+            FacesMessage message = new FacesMessage("Successful", event.getFile().getFileName() + " is uploaded.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Find an images using current search criterias
+     */
+    public void searchAction(ActionEvent actionEvent) {
+        currentImages = imageService.searchImages(searchString, searchStringSelected, allCollections);
     }
 
 }

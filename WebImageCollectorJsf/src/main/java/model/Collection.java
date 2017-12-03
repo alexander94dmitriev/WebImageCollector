@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Adminko on 28/10/17.
+ * This class stores the images that are in one collection, it has a name and the list of images
  */
 public class Collection {
 

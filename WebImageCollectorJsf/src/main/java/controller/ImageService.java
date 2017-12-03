@@ -24,7 +24,7 @@ import java.util.List;
 public class ImageService {
     private List<Image> allImages;
 
-    /*
+    /**
     Read imageData.txt file and initialize list of images
      */
     public List<Image> initializeImageList() throws IOException {
@@ -65,15 +65,17 @@ public class ImageService {
         return allImages;
     }
 
+    /**
+     * Create the tags list
+     *
+     * @return
+     */
     public List<String> initializeAllTagsList() {
         List<String> allTags = new ArrayList<>();
 
-        for(Image image: allImages)
-        {
-            for(String tag: image.getTags())
-            {
-                if(!allTags.contains(tag))
-                {
+        for(Image image: allImages) {
+            for(String tag: image.getTags()) {
+                if(!allTags.contains(tag)) {
                     allTags.add(tag);
                 }
             }
@@ -95,8 +97,8 @@ public class ImageService {
         allImages.add(image);
     }
 
-    /*
-    Upload the image
+    /**
+     Upload the image to an app, store the info about it in textData
      */
     public void uploadImage(UploadedFile file) {
         try {
@@ -149,7 +151,7 @@ public class ImageService {
         }
     }
 
-    /*
+    /**
     Add the Image to the text file list
      */
     public void addImageToList(Image image)
@@ -169,7 +171,7 @@ public class ImageService {
 
     }
 
-    /*
+    /**
     Delete the image from the list and remove the corresponding data from the imageData.txt
      */
     public List<Image> deleteSelectedImage(Image image){
@@ -235,6 +237,11 @@ public class ImageService {
         return allImages;
     }
 
+    /**
+     * add a tag to an Image and store the info in textData
+     * @param image
+     * @param tag
+     */
     public void addTagToImage(Image image, String tag) {
         String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
         File f = new File(projectPath + "\\imageData.txt");
@@ -258,8 +265,8 @@ public class ImageService {
                 if (readLine.isEmpty())
                     continue;
 
-                    writer.println(readLine);
-                    writer.flush();
+                writer.println(readLine);
+                writer.flush();
                 readLine = null;
             }
 
@@ -283,9 +290,20 @@ public class ImageService {
         }
     }
 
+    /**
+     * Remove the tag from inage and remove the info in textData
+     * @param image
+     * @param tag
+     */
     public void removeTagFromImage(Image image, String tag) {
         String projectPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/");
         File f = new File(projectPath + "\\imageData.txt");
+
+        if (tag.isEmpty()) {
+            FacesMessage message = new FacesMessage("Nothing is selected to delete");
+            FacesContext.getCurrentInstance().addMessage("", message);
+            return;
+        }
 
         File newFile = new File(f.getAbsolutePath()+".tmp");
 
@@ -327,40 +345,36 @@ public class ImageService {
         }
     }
 
+    /**
+     * Find an image using selected search criteria
+     * @param searchString
+     * @param searchStringSelected
+     * @param collections
+     * @return
+     */
     public List<Image> searchImages(String searchString, String searchStringSelected, List<Collection> collections) {
         List<Image> currentImages = new ArrayList<>();
-        if(searchString == null || searchString.isEmpty() || searchStringSelected == null)
-        {
+        if(searchString == null || searchString.isEmpty() || searchStringSelected == null) {
             currentImages = allImages;
-        }
-        else if(searchStringSelected.contains("tags"))
-        {
+        } else if(searchStringSelected.contains("tags")) {
             currentImages = new ArrayList<>();
             String[] split = searchString.split(", ");
-            for(Image image: allImages)
-            {
+            for(Image image: allImages) {
                 for(int i = 0; i < split.length; ++i)
-                    if(image.getTags().contains(split[i]))
-                    {
+                    if(image.getTags().contains(split[i])) {
                         currentImages.add(image);
                     }
             }
-        }
-        else if(searchStringSelected.contains("collections"))
-        {
+        } else if(searchStringSelected.contains("collections")) {
             for (Collection collection : collections) {
                 if (collection.getName().contains(searchString)) {
                     currentImages = collection.getImages();
                     break;
                 }
             }
-        }
-        else if(searchStringSelected.contains("name"))
-        {
-            for(Image image: allImages)
-            {
-                if(image.getName().contains(searchString))
-                {
+        } else if(searchStringSelected.contains("name")) {
+            for(Image image: allImages) {
+                if(image.getName().contains(searchString)) {
                     currentImages.add(image);
                 }
             }
