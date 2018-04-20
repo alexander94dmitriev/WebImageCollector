@@ -51,6 +51,7 @@ Then: The checkboxes appear near every image along with "Save" and "Cancel" butt
 
 
 ##Execution 
+
 Use this command:
 `mvn jetty:run-war`
 
