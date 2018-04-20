@@ -50,7 +50,7 @@ When: user clicks on arrow near any Collection and clicks on "Add Image"
 Then: The checkboxes appear near every image along with "Save" and "Cancel" buttons on the bottom. Checking checboxes and Saving will add the Images, cancelling will reset the process of adding the images to collection.   
 
 
-##Execution 
+## Execution 
 
 Use this command:
 `mvn jetty:run-war`
