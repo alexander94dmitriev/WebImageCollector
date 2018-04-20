@@ -48,3 +48,10 @@ Then: A collection should be deleted from the list of collections
 Given: the app has some images and collections with images   
 When: user clicks on arrow near any Collection and clicks on "Add Image"   
 Then: The checkboxes appear near every image along with "Save" and "Cancel" buttons on the bottom. Checking checboxes and Saving will add the Images, cancelling will reset the process of adding the images to collection.   
+
+
+##Execution 
+Use this command:
+`mvn jetty:run-war`
+
+The page should be accessible at http://localhost:9090/WebImageCollector/
